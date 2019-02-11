@@ -1,0 +1,6 @@
+node_modules/
+.babelrc
+.vscode
+dist/
+public/
+package-lock.json
