@@ -6,6 +6,12 @@ import S3 from './S3'
 import VPC from './VPC'
 import AvailabilityZone from './AvailabilityZone'
 import cola from 'cytoscape-cola';
+import popper from 'cytoscape-popper';
+var cyqtip = require('cytoscape-qtip');
+
+cyqtip( cytoscape );
+
+cytoscape.use( popper );
 // import data from './sample.js'
 
 cytoscape.use( cola );
@@ -303,10 +309,14 @@ class Cyto extends Component{
             'opacity': 0.5
           })
           
-          // layout: { name: 'random' }
-          // layout : {name: 'cose', randomize: true,flow: { axis: 'y', minSeparation: 40}, avoidOverlap: true}
         });
-        // this.cy.layout({name: 'cola', flow: { axis: 'y', minSeparation: 40}, avoidOverlap: true}).run();
+      
+        /**
+         *  VPCs just pass in the id
+         *  Availability Zone pass in the ID and the VPC's ID
+         *  EC2( data, parent, source)
+         *  S3 ( data, parent, source )
+         */
 
       this.cy.add(new VPC("vpc-d2681ab7").getVPCObject());
       this.cy.add(new AvailabilityZone("us-west-2b","vpc-d2681ab7").getAvailabilityZoneObject());
@@ -314,30 +324,7 @@ class Cyto extends Component{
       this.cy.add(new EC2({id:1}, "us-west-2b" , 0).getEC2Object());
       this.cy.add(new AvailabilityZone("us-west-1a","vpc-d2681ab7").getAvailabilityZoneObject());
       this.cy.add(new EC2({id:2}, "us-west-1a", 1).getEC2Object());
-      // this.cy.add(new EC2({id:4}, "vpc-d2681ab7", 2).getEC2Object());
-      // this.cy.add(new EC2({id:5}, null, 4 ).getEC2Object());
       this.cy.add(new S3({id: 3},"us-west-2b",1).getS3Object());
-      // this.cy.add(new VPC("vpc-d2681ab7").getVPCObject());
-      
-        // const data = [
-        //     {type:"EC2", id: 123, parent: null},
-        //     {type: "EC2", id: 124, parent: 123},
-        //     {type: "S3", id: 125, parent: 123},
-        //     {type: "S3", id: 126, parent: 124}
-        //   ];
-        //   for(let i = 0; i < data.length; i++ ){
-        //     let {type, _id, parent} = data[i];
-        //     console.log(parent)
-        //     if(type === "EC2"){
-        //       if(parent) this.cy.add(new EC2({id: _id}, parent).getEC2Object());
-        //       else this.cy.add(new EC2({id: _id}).getEC2Object());
-        //     }
-        //     else if (type === "S3"){
-        //       if(parent)this.cy.add(new S3({id: _id}, parent).getS3Object());
-        //       else this.cy.add(new S3({id: _id}).getS3Object());
-              
-        //     }
-        //   }
 
         this.cy.on('tap', 'node', function (evt){
           console.log("The id of the node clicked is ", this.id());
